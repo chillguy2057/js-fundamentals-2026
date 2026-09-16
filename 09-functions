@@ -1,0 +1,67 @@
+// TEEMA 9: Funktsioonid — taaskasutatav käitumine
+
+// --- Funktsiooni deklareerimine ja kutsumine ---
+function greet(name) {
+  return `Tere, ${name}!`;
+}
+console.log(greet("Artjom")); // kutsumine argumendiga "Artjom"
+
+// --- Parameetrid vs argumendid ---
+// "name" funktsiooni definitsioonis on PARAMEETER
+// "Artjom" funktsiooni kutsumisel on ARGUMENT (tegelik väärtus, mis parameetrisse antakse)
+
+// --- Vaikeväärtused parameetritele ---
+function greetWithDefault(name = "külaline") {
+  return `Tere, ${name}!`;
+}
+console.log(greetWithDefault());        // "Tere, külaline!" - kasutab vaikeväärtust
+console.log(greetWithDefault("Berit")); // "Tere, Berit!" - kasutab antud väärtust
+
+// --- Väärtuste tagastamine return'iga ---
+function add(a, b) {
+  return a + b;
+}
+const sum = add(3, 4);
+console.log("Tagastatud väärtus:", sum); // 7
+
+// --- return vs console.log() ---
+// console.log() ainult KUVAB väärtuse konsoolis, ei anna seda edasi teistele funktsioonidele
+// return ANNAB väärtuse tagasi, mida saab kasutada/salvestada väljaspool funktsiooni
+function logOnly(a, b) {
+  console.log(a + b); // ainult prindib, ei tagasta midagi kasutatavat
+}
+function returnOnly(a, b) {
+  return a + b; // tagastab, saab hiljem kasutada
+}
+const loggedResult = logOnly(2, 3);       // prindib 5
+const returnedResult = returnOnly(2, 3);  // ei prindi midagi automaatselt
+console.log("logOnly tagastas:", loggedResult);       // undefined!
+console.log("returnOnly tagastas:", returnedResult);  // 5
+
+// --- Mis juhtub, kui pole selget return'it? ---
+function noReturn() {
+  const x = 5; // funktsioon ei tagasta midagi
+}
+console.log("Funktsioon ilma return'ita tagastab:", noReturn()); // undefined
+
+// --- Levinud algaja viga ---
+// Viga: segamini aetakse console.log() ja return - eeldatakse, et console.log väärtus on kasutatav
+function calculateTotalMistake(price, quantity) {
+  console.log(price * quantity); // ainult prindib
+}
+const totalMistake = calculateTotalMistake(10, 3); // prindib 30
+console.log("Viga - kasutatud väärtus:", totalMistake); // undefined, mitte 30!
+
+function calculateTotalFixed(price, quantity) {
+  return price * quantity;
+}
+const totalFixed = calculateTotalFixed(10, 3);
+console.log("Parandus - kasutatud väärtus:", totalFixed); // 30
+
+// --- Predict the output ---
+function mystery(a, b = 5) {
+  return a + b;
+}
+console.log(mystery(10));    // Mida see prindib?
+console.log(mystery(10, 20)); // Ja see?
+// Vastused: 15 (b kasutab vaikeväärtust 5) ja 30 (b saab argumendiks 20)
