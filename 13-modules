@@ -1,0 +1,27 @@
+// TEEMA 13: Moodulid — import/export (index.mjs)
+
+// --- Nimeliste eksportide importimine ({} sees, nimed peavad ühtima) ---
+import { add, multiply, PI } from "./mathHelpers.mjs";
+
+// --- Vaikimisi eksporditu importimine (ilma {}, saab anda suvalise nime) ---
+import subtract from "./mathHelpers.mjs";
+
+console.log("add(2, 3):", add(2, 3));           // 5
+console.log("multiply(2, 3):", multiply(2, 3)); // 6
+console.log("PI:", PI);                          // 3.14159
+console.log("subtract(5, 2):", subtract(5, 2));  // 3 (default export, suvaline nimi lubatud)
+
+// --- Kõigi named eksportide importimine korraga (namespace import) ---
+import * as MathHelpers from "./mathHelpers.mjs";
+console.log("namespace import:", MathHelpers.add(10, 10)); // 20
+
+// --- Levinud algaja viga ---
+// Viga: import süntaksi mitte vastavusse viimine export'i tüübiga
+// import { subtract } from "./mathHelpers.mjs"; // VIGA! subtract on default export, mitte named
+// Õige: import subtract from "./mathHelpers.mjs"; (ilma {}-ta)
+console.log("Levinud viga: default export tuleb importida ilma {} ümbriseta");
+
+// --- Predict the output ---
+// Kui mathHelpers.mjs muudaks PI = 3.14 väärtust pärast eksportimist,
+// kas index.mjs näeks uut väärtust? Vastus: JAH, ES moodulid impordivad "live binding",
+// mitte lihtsalt väärtuse koopiat (kuigi const väärtusi ei saa niikuinii muuta).
