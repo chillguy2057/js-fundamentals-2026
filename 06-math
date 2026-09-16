@@ -1,0 +1,44 @@
+// TEEMA 6: Arvud ja Math objekt
+
+// --- Math.round(), Math.floor(), Math.ceil() ---
+console.log(Math.round(4.5));  // 5 (ümardab lähima täisarvuni)
+console.log(Math.round(4.4));  // 4
+console.log(Math.floor(4.9));  // 4 (alati alla poole)
+console.log(Math.ceil(4.1));   // 5 (alati üle poole)
+
+// --- Math.min() ja Math.max() ---
+console.log(Math.min(3, 7, 1, 9)); // 1
+console.log(Math.max(3, 7, 1, 9)); // 9
+
+// --- Math.random() vahemik ---
+const randomValue = Math.random();
+console.log("Math.random():", randomValue); // 0 (kaasa arvatud) kuni 1 (välja arvatud)
+
+// --- Näide: juhusliku täisarvu genereerimine vahemikus 1-6 (täringuvise) ---
+function rollDice() {
+  return Math.floor(Math.random() * 6) + 1;
+  // Math.random() -> 0 kuni 0.999...
+  // * 6           -> 0 kuni 5.999...
+  // Math.floor()  -> 0 kuni 5
+  // + 1           -> 1 kuni 6
+}
+console.log("Täringuvise:", rollDice());
+console.log("Veel üks vise:", rollDice());
+
+// --- Üldisem funktsioon vahemiku jaoks ---
+function randomInRange(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+console.log("Juhuslik arv 10-20 vahel:", randomInRange(10, 20));
+
+// --- Levinud algaja viga ---
+// Viga: unustatakse +1, mistõttu max väärtust ei saagi kunagi
+function rollDiceWrong() {
+  return Math.floor(Math.random() * 6); // annab 0-5, mitte 1-6!
+}
+console.log("Vale täringuvise (0-5):", rollDiceWrong());
+console.log("Õige täringuvise (1-6):", rollDice());
+
+// --- Predict the output ---
+console.log(Math.floor(-4.5)); // Mida see prindib?
+// Vastus: -5, sest Math.floor() ümardab alati väiksema (negatiivsema) suunas
