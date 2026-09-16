@@ -1,0 +1,87 @@
+// TEEMA 8: Objektid ja puuduvate andmete käsitlemine
+
+// --- Objekti loomine omaduste ja väärtustega ---
+const user = {
+  name: "Artjom",
+  age: 21,
+  isStudent: true,
+};
+console.log(user);
+
+// --- Omaduste lugemine dot ja bracket notatsiooniga ---
+console.log(user.name);      // dot notation - "Artjom"
+console.log(user["age"]);    // bracket notation - 21
+
+// bracket notation on vajalik, kui omaduse nimi on muutujas
+const key = "isStudent";
+console.log(user[key]); // true
+
+// --- Omaduste lisamine ja uuendamine ---
+user.email = "artjom@example.com"; // lisamine
+user.age = 22;                     // uuendamine
+console.log("Pärast muudatusi:", user);
+
+// --- Sisemised (nested) objektid ---
+const profile = {
+  name: "Artjom",
+  address: {
+    city: "Tallinn",
+    country: "Estonia",
+  },
+};
+console.log(profile.address.city); // "Tallinn"
+
+// --- Mis juhtub, kui omadust pole olemas? ---
+console.log(profile.phoneNumber); // undefined, EI viska viga
+// console.log(profile.address.zip.code); // TypeError, sest address.zip on undefined
+
+// --- Optional chaining: ?. ---
+console.log(profile.address?.city);        // "Tallinn"
+console.log(profile.contact?.email);       // undefined, ei viska viga
+console.log(profile.contact?.email?.toUpperCase()); // undefined (turvaline ahelates)
+
+// --- Nullish coalescing: ?? ---
+const displayName = profile.nickname ?? "Anonüümne";
+console.log("Nullish coalescing:", displayName); // "Anonüümne"
+
+// --- value ?? fallback vs value || fallback ---
+const zeroValue = 0;
+const emptyString = "";
+const falseValue = false;
+
+console.log(zeroValue ?? "vaikeväärtus");    // 0   -> ?? aktsepteerib 0-i kehtiva väärtusena
+console.log(zeroValue || "vaikeväärtus");    // "vaikeväärtus" -> || peab 0 falsy'ks ja asendab!
+
+console.log(emptyString ?? "vaikimisi");     // "" -> jääb tühjaks stringiks
+console.log(emptyString || "vaikimisi");     // "vaikimisi" -> asendab tühja stringi
+
+console.log(falseValue ?? "vaikimisi");      // false -> jääb false'ks
+console.log(falseValue || "vaikimisi");      // "vaikimisi" -> asendab false'i
+
+// --- Näide: kasutaja profiili kuvamine puuduvate andmetega ---
+function displayProfile(userData) {
+  const city = userData.address?.city ?? "linn teadmata";
+  const bio = userData.bio ?? "kasutaja pole veel bio't lisanud";
+  return `${userData.name} — ${city}. ${bio}`;
+}
+console.log(displayProfile({ name: "Berit", address: { city: "Tartu" } }));
+console.log(displayProfile({ name: "Carl" })); // puudub address ja bio
+
+// --- Levinud algaja viga ---
+// Viga: kasutatakse || vaikeväärtuse jaoks, kui 0 või "" on valiidne väärtus
+function mistakeExample(discount) {
+  const finalDiscount = discount || 10; // KUI discount on 0, asendatakse valesti 10-ga!
+  return finalDiscount;
+}
+console.log("Viga (|| kasutamine):", mistakeExample(0)); // 10, aga kasutaja tahtis 0% soodustust!
+function fixedExample(discount) {
+  const finalDiscount = discount ?? 10; // ?? kontrollib ainult null/undefined
+  return finalDiscount;
+}
+console.log("Parandus (?? kasutamine):", fixedExample(0)); // 0, õige!
+
+// --- Predict the output ---
+const data = { count: 0 };
+console.log(data.count || "puudub"); // Mida see prindib?
+console.log(data.count ?? "puudub"); // Ja see?
+// Vastused: "puudub" (0 on falsy) ja 0 (?? aktsepteerib 0 kui kehtiva väärtuse)
