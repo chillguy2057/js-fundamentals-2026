@@ -1,0 +1,64 @@
+// TEEMA 5: Võrdlused, loogikaoperaatorid ja otsustused
+
+// --- Võrdlusoperaatorid ---
+console.log(5 === 5);   // true (range võrdlus, kontrollib ka tüüpi)
+console.log(5 === "5"); // false
+console.log(5 !== "5"); // true
+console.log(5 > 3, 5 < 3, 5 >= 5, 5 <= 4); // true false true false
+
+// --- Miks eelistada === (mitte ==) ---
+console.log(5 == "5");  // true -> == teisendab tüüpe enne võrdlemist (ohtlik)
+console.log(5 === "5"); // false -> === ei teisenda, turvalisem ja etteaimatavam
+console.log(0 == false);   // true - üllatav!
+console.log(0 === false);  // false - selge ja ootuspärane
+
+// --- Loogikaoperaatorid ---
+console.log(true && false); // false (mõlemad peavad olema tõesed)
+console.log(true || false); // true (piisab ühest tõesest)
+console.log(!true);         // false (eitus)
+
+// --- Truthy ja falsy väärtused ---
+// Falsy väärtused JS-is: false, 0, "", null, undefined, NaN
+console.log(Boolean(""));        // false
+console.log(Boolean(0));         // false
+console.log(Boolean(null));      // false
+console.log(Boolean(undefined)); // false
+console.log(Boolean("tekst"));   // true
+console.log(Boolean(1));         // true
+
+// --- if, else if, else ---
+function checkAge(age) {
+  if (age < 13) {
+    return "laps";
+  } else if (age < 18) {
+    return "noor";
+  } else {
+    return "täiskasvanu";
+  }
+}
+console.log(checkAge(10), checkAge(15), checkAge(25));
+
+// --- Ternary operaator ---
+const isLoggedIn = true;
+const message = isLoggedIn ? "Tere tulemast tagasi!" : "Palun logi sisse";
+console.log(message);
+
+// --- Näide: vanuse ja sisselogimise kontroll koos ---
+function getUserMessage(age, loggedIn) {
+  if (!loggedIn) {
+    return "Palun logi sisse, et jätkata.";
+  }
+  return age >= 18 ? "Tere tulemast, täiskasvanud kasutaja!" : "Tere tulemast, noor kasutaja!";
+}
+console.log(getUserMessage(20, true));
+console.log(getUserMessage(20, false));
+console.log(getUserMessage(15, true));
+
+// --- Levinud algaja viga ---
+// Viga: == kasutamine === asemel, mis toob üllatavaid tulemusi
+console.log("Viga - '' == 0:", "" == 0);   // true (üllatav!)
+console.log("Parandus - '' === 0:", "" === 0); // false (õige, ootuspärane)
+
+// --- Predict the output ---
+console.log(1 && 2 && 0 && 3); // Mida see prindib?
+// Vastus: 0 - && tagastab esimese falsy väärtuse, või viimase, kui kõik on tõesed
