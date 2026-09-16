@@ -1,0 +1,69 @@
+// TEEMA 12: Destruktureerimine ja spread süntaks
+
+// --- Objekti destruktureerimine ---
+const user = { name: "Artjom", age: 21, city: "Tallinn" };
+const { name, age } = user;
+console.log("Objekti destruktureerimine:", name, age); // "Artjom" 21
+
+// Ümbernimetamine ja vaikeväärtused destruktureerimisel
+const { name: userName, country = "Estonia" } = user;
+console.log("Ümbernimetatud ja vaikeväärtus:", userName, country); // "Artjom" "Estonia"
+
+// --- Massiivi destruktureerimine ---
+const colors = ["punane", "roheline", "sinine"];
+const [first, second] = colors;
+console.log("Massiivi destruktureerimine:", first, second); // "punane" "roheline"
+
+const [primary, , tertiary] = colors; // vahele jätmine komaga
+console.log("Vahele jätmine:", primary, tertiary); // "punane" "sinine"
+
+// --- Kopeerimine ... abil ---
+const originalArray = [1, 2, 3];
+const copiedArray = [...originalArray];
+copiedArray.push(4);
+console.log("Originaal:", originalArray);   // [1, 2, 3] - muutumatu
+console.log("Koopia:", copiedArray);        // [1, 2, 3, 4]
+
+const originalObject = { a: 1, b: 2 };
+const copiedObject = { ...originalObject };
+copiedObject.c = 3;
+console.log("Originaal:", originalObject);  // { a: 1, b: 2 } - muutumatu
+console.log("Koopia:", copiedObject);       // { a: 1, b: 2, c: 3 }
+
+// --- Uue massiivi loomine lisatud elemendiga ---
+const numbers = [1, 2, 3];
+const withNewNumber = [...numbers, 4];
+console.log("Uus massiiv lisatud elemendiga:", withNewNumber); // [1, 2, 3, 4]
+
+// --- Uue objekti loomine uuendatud omadusega ---
+const product = { name: "Sülearvuti", price: 900 };
+const discountedProduct = { ...product, price: 800 }; // hiljem kirjutatud väärtus võidab
+console.log("Uuendatud omadusega objekt:", discountedProduct); // { name: "Sülearvuti", price: 800 }
+
+// --- Miks saab const objekti ikkagi muuta? ---
+// const lukustab MUUTUJA (viite), mitte objekti SISU
+const lockedObject = { value: 1 };
+lockedObject.value = 2; // see on lubatud, sest muudame objekti sisu, mitte viidet
+console.log("const objekti sisu muutmine on lubatud:", lockedObject); // { value: 2 }
+// lockedObject = {}; // See VISKAB VIGA, sest üritame muuta viidet ennast
+
+// --- Miks spread teeb pinnapealse (shallow) koopia? ---
+const nested = { user: { name: "Artjom" } };
+const shallowCopy = { ...nested };
+shallowCopy.user.name = "Berit"; // muudab ka originaali sisemist objekti!
+console.log("Shallow copy mõjutab pesastatud objekti:", nested.user.name); // "Berit", mitte "Artjom"!
+// Sest spread kopeerib ainult ESIMESE taseme, sisemised objektid jäävad sama viitega
+
+// --- Levinud algaja viga ---
+// Viga: eeldatakse, et spread teeb täieliku (deep) koopia
+console.log("Viga: pesastatud objekti muutmine mõjutas originaali - vt eelmist näidet");
+// Parandus sisemiste objektide jaoks: struktureeritud (deep) koopia, nt JSON meetodil või structuredClone()
+const deepCopy = JSON.parse(JSON.stringify(nested));
+deepCopy.user.name = "Carl";
+console.log("Deep copy ei mõjuta originaali:", nested.user.name); // "Berit" (muutumatu sellest muudatusest)
+
+// --- Predict the output ---
+const base = { x: 1, y: 2 };
+const updated = { ...base, x: 100 };
+console.log(updated); // Mida see prindib?
+// Vastus: { x: 100, y: 2 } - hiljem kirjutatud omadus (x: 100) kirjutab varasema (x: 1) üle
