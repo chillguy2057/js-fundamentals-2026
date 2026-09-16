@@ -1,0 +1,85 @@
+// TEEMA 7: Massiivid ja tsüklid
+
+// --- Massiivi loomine ja elementidele ligipääs indeksi järgi ---
+const names = ["Anna", "Berit", "Carl"];
+console.log(names[0]); // "Anna"
+console.log(names[2]); // "Carl"
+
+// --- Null-põhine indekseerimine ja .length ---
+console.log("Esimene element on indeksil 0, mitte 1");
+console.log("Massiivi pikkus:", names.length); // 3
+console.log("Viimane element:", names[names.length - 1]); // "Carl"
+
+// --- .includes(), .push(), .pop() ---
+console.log(names.includes("Berit")); // true
+names.push("Diana");  // lisab lõppu, MUUDAB originaalmassiivi
+console.log("Pärast push:", names);
+const removed = names.pop(); // eemaldab viimase, MUUDAB originaalmassiivi
+console.log("Eemaldatud:", removed, "Pärast pop:", names);
+
+// --- Millised operatsioonid muudavad originaalmassiivi? ---
+// Muudavad (mutating): push, pop, shift, unshift, splice, sort, reverse
+// Ei muuda (non-mutating): map, filter, concat, slice, includes
+
+// --- Iteratsioon for tsükliga ---
+for (let i = 0; i < names.length; i++) {
+  console.log(`for tsükkel [${i}]:`, names[i]);
+}
+
+// --- for...of tsükkel ---
+for (const name of names) {
+  console.log("for...of:", name);
+}
+
+// --- for tsükli osad: loendur, tingimus, uuendus ---
+// for (algseadistus; tingimus; uuendus) { ... }
+for (let i = 0; i < 3; i++) {
+  // i = 0: loendur (initialization)
+  // i < 3: tingimus (condition) - kontrollitakse enne igat kordust
+  // i++:   uuendus (update) - toimub pärast iga kordust
+  console.log("loenduri demo:", i);
+}
+
+// --- break ja lõputu tsükli vältimine ---
+for (let i = 0; i < 10; i++) {
+  if (i === 3) {
+    break; // katkestab tsükli täielikult
+  }
+  console.log("break demo:", i);
+}
+// Lõputu tsükli oht: kui unustada uuendus (i++), tingimus jääb alati tõeseks
+
+// --- Näide: nimekirja loomine, uuendamine ja printimine ---
+const groceries = [];
+groceries.push("piim");
+groceries.push("leib");
+groceries.push("munad");
+console.log("Ostunimekiri:", groceries);
+for (const item of groceries) {
+  console.log("- " + item);
+}
+
+// --- Levinud algaja viga ---
+// Viga: lõputu tsükkel, sest loendurit ei uuendata
+function infiniteLoopMistake() {
+  let count = 0;
+  let iterations = 0;
+  while (count < 5) {
+    iterations++;
+    if (iterations > 1000) {
+      console.log("Peatan demo, et vältida tegelikku lõputut tsüklit!");
+      break;
+    }
+    // count++ on unustatud -> count jääb alati 0-ks
+  }
+  console.log("Tsükkel oleks jooksnud lõputult, kuna count-i ei uuendatud");
+}
+infiniteLoopMistake();
+// Parandus: alati kontrolli, et tsükli tingimus muutuks lõpuks valeks
+
+// --- Predict the output ---
+const arr = [1, 2, 3];
+const arrCopy = arr;
+arrCopy.push(4);
+console.log(arr); // Mida see prindib?
+// Vastus: [1, 2, 3, 4] - massiivid on objektid, arrCopy viitab samale massiivile mälus
