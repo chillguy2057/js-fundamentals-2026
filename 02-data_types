@@ -1,0 +1,55 @@
+// TEEMA 2: Andmetüübid, null ja undefined
+
+// --- Põhitüübid ---
+const str = "tekst";
+const num = 42;
+const bool = true;
+const obj = { key: "value" };
+const arr = [1, 2, 3];
+
+console.log(typeof str);  // "string"
+console.log(typeof num);  // "number"
+console.log(typeof bool); // "boolean"
+console.log(typeof obj);  // "object"
+console.log(typeof arr);  // "object" (kummaline, vt allpool)
+
+// --- null vs undefined ---
+let notAssigned;           // deklareeritud, aga väärtust pole antud
+let empty = null;          // teadlikult tühjaks määratud
+
+console.log("undefined:", notAssigned); // undefined
+console.log("null:", empty);            // null
+console.log(typeof notAssigned); // "undefined"
+console.log(typeof empty);       // "object" <- kummalisus!
+
+// Erinevus: undefined = "väärtust pole veel antud"
+//           null = "teadlikult tühi/puuduv väärtus"
+
+// --- "5" vs 5 ---
+console.log("5" === 5);          // false, erinev tüüp
+console.log(typeof "5", typeof 5); // "string" "number"
+
+// --- Kaks kummalisust ---
+console.log(typeof null);  // "object" — ajalooline JS bugi, mida ei parandatud
+console.log(typeof []);    // "object" — massiivid on tehniliselt objektid
+
+// --- Array.isArray() ---
+console.log(Array.isArray(arr));  // true
+console.log(Array.isArray(obj));  // false
+console.log(Array.isArray("abc")); // false
+
+// --- Levinud algaja viga ---
+// Viga: kasutatakse typeof massiivi kontrollimiseks
+function isArrayMistake(value) {
+  if (typeof value === "array") { // see EI TÖÖTA KUNAGI, sest typeof tagastab "object"
+    return "on massiiv";
+  }
+  return "ei tuvastanud";
+}
+console.log("Vale meetod:", isArrayMistake([1, 2, 3])); // "ei tuvastanud" - viga!
+console.log("Õige meetod:", Array.isArray([1, 2, 3]) ? "on massiiv" : "ei ole"); // parandus
+
+// --- Predict the output ---
+console.log(typeof typeof 5); // Mida see prindib?
+// Vastus: "string", sest typeof 5 -> "number" (string), ja typeof "number" -> "string"
+
