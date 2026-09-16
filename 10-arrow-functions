@@ -1,0 +1,57 @@
+// TEEMA 10: Nooleavaldised (arrow functions) ja callback'id
+
+// --- Funktsiooniavaldis (function expression) ---
+const multiplyExpr = function (x, y) {
+  return x * y;
+};
+console.log("function expression:", multiplyExpr(3, 4)); // 12
+
+// --- Arrow function süntaks ---
+const multiplyArrow = (x, y) => {
+  return x * y;
+};
+console.log("arrow function:", multiplyArrow(3, 4)); // 12
+
+// --- Implitsiitne return vs eksplitsiitne return ---
+const double = x => x * 2; // implitsiitne: pole {} ega return-sõna, tagastab automaatselt
+const doubleExplicit = x => {
+  return x * 2; // eksplitsiitne: {} sees peab kasutama return-sõna
+};
+console.log("implitsiitne:", double(5));         // 10
+console.log("eksplitsiitne:", doubleExplicit(5)); // 10
+
+// Kui kasutada {} ilma return-ita, tagastatakse undefined!
+const doubleBroken = x => { x * 2; }; // puudub return
+console.log("puuduv return:", doubleBroken(5)); // undefined
+
+// --- Callback'id: funktsiooni andmine teisele funktsioonile ---
+function processValue(value, callback) {
+  return callback(value);
+}
+console.log(processValue(10, x => x + 1)); // 11
+console.log(processValue(10, x => x * 100)); // 1000
+
+// --- Näide: callback .forEach()-iga ---
+const numbers = [1, 2, 3, 4];
+numbers.forEach(number => {
+  console.log(`Number: ${number}, kahekordselt: ${number * 2}`);
+});
+
+// forEach ei tagasta uut massiivi, ta lihtsalt "käib läbi" iga elemendi
+const forEachResult = numbers.forEach(n => n * 2);
+console.log("forEach tagastab:", forEachResult); // undefined
+
+// --- Levinud algaja viga ---
+// Viga: objekti literal arrow function'i implitsiitses returnis segi minek {}-ga
+// const makeUser = (name) => { name: name }; // See EI tagasta objekti, vaid tõlgendatakse plokina!
+const makeUserMistake = (name) => { name: name }; // ei tekita viga, aga tagastab undefined
+console.log("Viga - objekti tagastamine:", makeUserMistake("Artjom")); // undefined
+
+// Parandus: objekti tagastamiseks pane see sulgudesse
+const makeUserFixed = (name) => ({ name: name });
+console.log("Parandus - objekti tagastamine:", makeUserFixed("Artjom")); // { name: "Artjom" }
+
+// --- Predict the output ---
+const result = [1, 2, 3].forEach(n => n * 10);
+console.log(result); // Mida see prindib?
+// Vastus: undefined - forEach EI tagasta uut massiivi (erinevalt map'ist)
