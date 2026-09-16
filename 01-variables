@@ -1,0 +1,61 @@
+// TEEMA 1: Muutujad — const, let, var
+
+// --- Deklareerimine, väärtustamine, ümberväärtustamine ---
+let age = 20;
+age = 21; // let lubab ümberväärtustada
+console.log("let ümberväärtustatud:", age);
+
+const name = "Artjom";
+// name = "Teine nimi"; // TypeError: Assignment to constant variable.
+console.log("const ei saa ümber väärtustada:", name);
+
+// --- Millal kasutada const, millal let ---
+// const: kui väärtus ei muutu programmi käigus (enamik juhtudest, default valik)
+// let: kui väärtus tuleb hiljem muuta (nt loenduritel, tingimustel uuenevad väärtused)
+let counter = 0;
+counter++;
+console.log("counter (let, kuna muutub):", counter);
+
+// --- Miks vanem kood kasutab var ---
+// var oli ainus võimalus enne ES6 (2015). Probleemid:
+// 1. var ei austa block scope'i (ainult function scope)
+// 2. var lubab sama muutuja uuesti deklareerida ilma veata
+var oldStyle = 1;
+var oldStyle = 2; // ei viska viga
+console.log("var lubab redeclare:", oldStyle);
+
+// --- Block scope: kuidas { } mõjutab kättesaadavust ---
+if (true) {
+  let blockScoped = "olen ainult siin plokis";
+  var functionScoped = "mina olen väljaspoolgi nähtav";
+  console.log("plokis:", blockScoped);
+}
+// console.log(blockScoped); // ReferenceError: blockScoped is not defined
+console.log("plokist väljas (var):", functionScoped); // töötab, sest var ignoreerib block scope'i
+
+// --- Levinud algaja viga ---
+// Viga: const muutuja püütakse hiljem ümber väärtustada
+function mistakeExample() {
+  try {
+    const total = 100;
+    total = 200; // viskab TypeError
+  } catch (err) {
+    console.log("Levinud viga - const ümberväärtustamine:", err.message);
+  }
+}
+mistakeExample();
+// Parandus: kasuta let, kui väärtus peab muutuma
+let total = 100;
+total = 200;
+console.log("Parandatud versioon (let):", total);
+
+// --- "Predict the output" küsimus klassile ---
+// Mida prindib see kood?
+function predictOutput() {
+  if (true) {
+    var x = 10;
+  }
+  console.log(x); // Mida siin prinditakse ja miks?
+}
+predictOutput();
+// Vastus: 10, sest var ei austa block scope'i, ainult function scope'i.
