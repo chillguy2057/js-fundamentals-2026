@@ -1,0 +1,65 @@
+// TEEMA 11: Massiivi meetodid — map, filter, find
+
+const products = [
+  { name: "Sülearvuti", price: 900, inStock: true },
+  { name: "Hiir", price: 20, inStock: true },
+  { name: "Klaviatuur", price: 50, inStock: false },
+  { name: "Monitor", price: 300, inStock: true },
+];
+
+// --- .map() - teisendab iga elemendi, tagastab UUE massiivi samas pikkuses ---
+const names = products.map(product => product.name);
+console.log("map - ainult nimed:", names);
+
+const withTax = products.map(product => ({
+  ...product,
+  priceWithTax: Math.round(product.price * 1.22),
+}));
+console.log("map - hindadega koos käibemaksuga:", withTax);
+
+// --- .filter() - valib sobivad elemendid, tagastab UUE (võimalik lühema) massiivi ---
+const inStockOnly = products.filter(product => product.inStock);
+console.log("filter - laos olevad:", inStockOnly);
+
+const expensive = products.filter(product => product.price > 100);
+console.log("filter - kallid tooted:", expensive);
+
+// filter tagastab tühja massiivi, kui midagi ei sobi (mitte undefined!)
+const veryExpensive = products.filter(product => product.price > 10000);
+console.log("filter - kui midagi ei leitud:", veryExpensive); // []
+
+// --- .find() - tagastab ESIMESE sobiva elemendi (mitte massiivi) ---
+const foundMouse = products.find(product => product.name === "Hiir");
+console.log("find - leitud toode:", foundMouse);
+
+// find tagastab undefined, kui midagi ei leitud (mitte tühja massiivi!)
+const notFound = products.find(product => product.name === "Telefon");
+console.log("find - kui midagi ei leitud:", notFound); // undefined
+
+// --- Näide: toodete nimekirja teisendamine ja otsimine ---
+function getAffordableProductNames(items, maxPrice) {
+  return items
+    .filter(item => item.price <= maxPrice)
+    .map(item => item.name);
+}
+console.log("Taskukohased tooted (alla 100€):", getAffordableProductNames(products, 100));
+
+function findFirstOutOfStock(items) {
+  return items.find(item => !item.inStock);
+}
+console.log("Esimene otsas olev toode:", findFirstOutOfStock(products));
+
+// --- Levinud algaja viga ---
+// Viga: eeldatakse, et map() muudab originaalmassiivi (nagu forEach koos push'iga)
+const original = [1, 2, 3];
+original.map(n => n * 2); // TULEMUS EI SALVESTATA kuhugi!
+console.log("Viga - map tulemust ei salvestatud:", original); // [1, 2, 3] - muutumatu!
+
+const doubled = original.map(n => n * 2); // õige: salvesta tagastusväärtus
+console.log("Parandus - map tulemus salvestatud:", doubled); // [2, 4, 6]
+
+// --- Predict the output ---
+const items = [10, 20, 30];
+console.log(items.find(n => n > 100)); // Mida see prindib?
+console.log(items.filter(n => n > 100)); // Ja see?
+// Vastused: undefined (find ei leidnud midagi) ja [] (filter ei leidnud midagi, aga tagastab massiivi)
