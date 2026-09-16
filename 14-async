@@ -1,0 +1,80 @@
+// TEEMA 14: Asünkroonne JavaScript — Promises ja async/await
+
+// --- Miks mõned operatsioonid lõpevad hiljem ---
+// Nt võrgupäringud, taimerid, failide lugemine - need võtavad aega ja ei blokeeri
+// samal ajal ülejäänud koodi täitmist (vt eelmiste videote event loop selgitusi).
+
+// --- Mida esindab promise ---
+// Promise on "lubadus", et tulevikus tekib väärtus (õnnestumine või ebaõnnestumine).
+const examplePromise = new Promise((resolve, reject) => {
+  const success = true;
+  setTimeout(() => {
+    if (success) {
+      resolve("Andmed saadud!");
+    } else {
+      reject("Viga andmete saamisel");
+    }
+  }, 500);
+});
+
+// --- Promise'i olekud: pending, fulfilled, rejected ---
+console.log("Promise loomisel on olek: pending");
+examplePromise
+  .then(result => console.log("fulfilled olek, tulemus:", result))
+  .catch(error => console.log("rejected olek, viga:", error));
+
+// --- async ja await kasutamine ---
+function fakeApiCall() {
+  return new Promise(resolve => {
+    setTimeout(() => resolve({ userId: 1, userName: "Artjom" }), 300);
+  });
+}
+
+async function getUser() {
+  console.log("Alustan andmete pärimist...");
+  const user = await fakeApiCall(); // ootab, kuni promise laheneb
+  console.log("Saadud kasutaja:", user);
+  return user;
+}
+getUser();
+
+// --- Miks async funktsioon tagastab alati promise'i ---
+async function alwaysReturnsPromise() {
+  return 42; // tavaline väärtus mähitakse automaatselt Promise'iks
+}
+const result = alwaysReturnsPromise();
+console.log("async funktsiooni tagastusväärtus on:", result); // Promise { 42 }
+result.then(value => console.log("promise'i lahendatud väärtus:", value)); // 42
+
+// --- Näide: antud promise'i ootamine ja tulemuse kasutamine ---
+async function processOrder(orderPromise) {
+  try {
+    const order = await orderPromise;
+    console.log("Tellimus töödeldud:", order);
+  } catch (error) {
+    console.log("Tellimuse töötlemine ebaõnnestus:", error);
+  }
+}
+const orderPromise = new Promise(resolve => {
+  setTimeout(() => resolve({ id: 101, status: "kinnitatud" }), 200);
+});
+processOrder(orderPromise);
+
+// --- Levinud algaja viga ---
+// Viga: unustatakse await, mistõttu saadakse promise, mitte tegelik väärtus
+async function mistakeExample() {
+  const data = fakeApiCall(); // unustatud await!
+  console.log("Viga - await unustatud, saadud:", data); // Promise { <pending> }
+}
+mistakeExample();
+
+async function fixedExample() {
+  const data = await fakeApiCall(); // õigesti oodatud
+  console.log("Parandus - await kasutatud, saadud:", data); // tegelik objekt
+}
+fixedExample();
+
+// --- Predict the output ---
+console.log("1. See prindib esimesena (sünkroonne kood)");
+fakeApiCall().then(() => console.log("3. See prindib pärast asünkroonset ootamist"));
+console.log("2. See prindib teisena (sünkroonne kood jätkub enne asünkroonset)");
