@@ -1,0 +1,52 @@
+// TEEMA 3: Operaatorid ja tüübiteisendus
+
+// --- Aritmeetilised operaatorid ---
+console.log(5 + 3);  // 8
+console.log(5 - 3);  // 2
+console.log(5 * 3);  // 15
+console.log(5 / 3);  // 1.666...
+console.log(5 % 3);  // 2 (jääk jagamisel)
+console.log(5 ** 2); // 25 (astendamine)
+
+// --- += ja ++ ---
+let score = 10;
+score += 5; // sama, mis score = score + 5
+console.log("+= tulemus:", score); // 15
+
+let lives = 3;
+lives++; // sama, mis lives = lives + 1
+console.log("++ tulemus:", lives); // 4
+
+// --- Number() ja String() ---
+console.log(Number("42"));     // 42 (arv)
+console.log(Number("42abc"));  // NaN, kuna ei suuda teisendada
+console.log(String(42));       // "42" (string)
+console.log(String(true));     // "true"
+
+// --- "5" + 2 vs Number("5") + 2 ---
+console.log("5" + 2);              // "52" -> + liidab stringidena kokku
+console.log(Number("5") + 2);      // 7    -> teisendatud arvuks enne liitmist
+
+// --- NaN ---
+console.log(0 / 0);          // NaN
+console.log("tekst" * 2);    // NaN
+console.log(typeof NaN);     // "number" (jah, NaN on tehniliselt "number")
+console.log(NaN === NaN);    // false! NaN ei võrdu millegagi, isegi iseendaga
+console.log(Number.isNaN(NaN)); // true - õige viis kontrollida
+
+// --- Levinud algaja viga ---
+// Viga: eeldatakse, et "+" käitub numbritega ja stringidega ühtemoodi
+function addValues(a, b) {
+  return a + b;
+}
+console.log("Viga - vormide kokku liitmine:", addValues("10", 5)); // "105", mitte 15!
+// Parandus:
+function addValuesFixed(a, b) {
+  return Number(a) + Number(b);
+}
+console.log("Parandatud:", addValuesFixed("10", 5)); // 15
+
+// --- Predict the output ---
+console.log("3" + 1 + 1);   // Mida see prindib?
+console.log(3 + 1 + "1");   // Ja see?
+// Vastused: "311" (string liitmine vasakult paremale) ja "41" (esmalt 3+1=4, siis "4"+"1")
