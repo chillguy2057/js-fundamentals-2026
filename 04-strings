@@ -1,0 +1,47 @@
+// TEEMA 4: Stringid ja mallistring (template literals)
+
+// --- Stringide loomine ---
+const single = 'ühekordsed jutumärgid';
+const double = "topeltjutumärgid";
+const backtick = `graavisega string (template literal)`;
+console.log(single, double, backtick);
+
+// --- .length ---
+const word = "JavaScript";
+console.log("Pikkus:", word.length); // 10
+
+// --- .trim() ---
+const messy = "   palju tühikuid   ";
+console.log(`"${messy.trim()}"`); // eemaldab tühikud algusest ja lõpust
+
+// --- .toLowerCase() ---
+console.log("SUURED TÄHED".toLowerCase()); // "suured tähed"
+
+// --- .includes() ---
+console.log("Tere maailm".includes("maailm")); // true
+console.log("Tere maailm".includes("Java"));   // false
+
+// --- Väärtuste sisestamine ${} abil ---
+const userName = "Artjom";
+const userAge = 21;
+const greeting = `Tere, ${userName}! Sa oled ${userAge}-aastane.`;
+console.log(greeting);
+
+// --- Näide: nime puhastamine ja tervituse koostamine ---
+function buildGreeting(rawName) {
+  const cleanName = rawName.trim().toLowerCase();
+  const capitalized = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+  return `Tere, ${capitalized}!`;
+}
+console.log(buildGreeting("   arTJOM   ")); // "Tere, Artjom!"
+
+// --- Levinud algaja viga ---
+// Viga: unustatakse, et ${} töötab AINULT backtick-stringide sees
+const brokenGreeting = "Tere, ${userName}!"; // ei asenda muutujat
+console.log("Vale (tavaline string):", brokenGreeting);
+const fixedGreeting = `Tere, ${userName}!`; // töötab
+console.log("Parandatud (backtick):", fixedGreeting);
+
+// --- Predict the output ---
+console.log(`Tulemus: ${2 + 2}`); // Mida see prindib?
+// Vastus: "Tulemus: 4" - ${} sees saab arvutada avaldisi, mitte ainult muutujaid
